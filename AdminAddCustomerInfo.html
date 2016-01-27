@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="jquery-2.1.4.min.js"></script>
+    <link rel="icon" href="bootstrap-3.3.5/docs/favicon.ico">
+    <title>Create Customer profile</title>
+    <link href="bootstrap-3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.5/docs/examples/cover/cover.css" rel="stylesheet">
+    <script src="bootstrap-3.3.5/docs/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="Admin.js"></script>
+
+    <script>
+      var repository= new Admin.CustomerRepository();
+
+      function newCustomer()
+      {
+        var customerId=$("#customerId").val();
+        var username=$("#username").val();
+        var password=$("#password").val();
+
+        if(localStorage["users"]==null||localStorage["users"]==undefined||localStorage["users"]=="null"||localStorage["users"]=="undefined"){
+          alert("Error: This customer does not exist!");
+          document.location="AdminHome.html";
+        }else{
+          var users=JSON.parse(localStorage["users"]);
+          for(var i=0;i<users.length;i++){
+            if(users[i].customerId==customerId && users[i].username==username && users[i].password==password){
+              if(localStorage["customerInfo"]!=null||localStorage["customerInfo"]!=undefined){
+                var customerInfos=JSON.parse(localStorage["customerInfo"]);
+                for(var j=0;j<customerInfos.length;j++){
+                  if(customerInfos[j].customerId==customerId){
+                    alert("Warning: This Customer already got Information Profile!!!");
+                    document.location="AdminHome.html";
+                  }else{
+                      var firstname=$("#firstname").val();
+                      var lastname=$("#lastname").val();
+                      var email=$("#email").val();
+                      var gender=$("#gender").val();  
+                      var mobile=$("#mobile").val();   
+                      var customer=new Admin.CustomerInfoModel(customerId,firstname,lastname,email,gender,mobile);
+                      repository.addCustomerInfo(customer); 
+                      alert("Customer Information Profile successfully created!")
+                      document.location="AdminHome.html"; 
+                  }//else
+                }//for
+              }else{
+                      var firstname=$("#firstname").val();
+                      var lastname=$("#lastname").val();
+                      var email=$("#email").val();
+                      var gender=$("#gender").val();  
+                      var mobile=$("#mobile").val();   
+                      var customer=new Admin.CustomerInfoModel(customerId,firstname,lastname,email,gender,mobile);
+                      repository.addCustomerInfo(customer); 
+                      alert("Customer Information Profile successfully created!")
+                      document.location="AdminHome.html"; 
+              }      
+            }else{
+              alert("Error: This customer does not exist!");
+              document.location="AdminHome.html";
+            }//has localstorage no repeat
+          }
+        }//no localstorage
+      }
+
+      //onload function
+      $(function(){
+        if(sessionStorage["user"]!=null||sessionStorage["user"]!=undefined){
+          var user=JSON.parse(sessionStorage["user"]);
+          if(user.username=="Admin"){
+            $("#save").click(function(){
+              newCustomer();
+            });
+
+          }else{
+            document.location="AdminLogin.html";
+          }
+        }else{
+          document.location="BankApp_Index.html";
+        }
+
+        $("#logout").click(function(){
+          sessionStorage.clear();
+          alert("Log out!")
+          document.location="BankApp_Index.html";
+        });//logout function
+      });
+
+      
+
+
+    </script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">BankApp</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active" ><a href="AdminHome.html">Home</a></li>
+                  <li class="active" id="logout"><a href='javascript:void(0)'>Logout</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">Create Customer Information Profile...</p>
+
+            <form>
+              <div>
+                <label>CustomerID</label>
+                <input type="text" id="customerId" style="color:black;" required autofocus/>
+              </div>
+              <div>
+                <label>Username &nbsp;&nbsp;</label>
+                <input type="text" id="username" style="color:black;" required/>
+              </div>
+              <div>
+                <label>Password&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="password" id="password" style="color:black;" required/>
+              </div>
+              <hr/>
+
+              <div>
+                <label>FirstName&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="firstname" style="color:black;" required/>
+              </div> 
+              <div>
+                <label>LastName&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="lastname" style="color:black;" required/>
+              </div>
+              <div>
+                <label>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="email" id="email" style="color:black;" required/>
+              </div>
+              <div>
+                <label>Gender&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <select id="gender" style="color:black;font-size:18px;width:150px;" required>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+              <div>
+                <label>Mobile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="mobile" style="color:black;" required/>
+              </div>
+              <div style="margin-top:10px;">
+                <button type="reset" class="btn btn-default">Clear</button>
+                <button type="button" id="save" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+          
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Develop by <a href="#">ShallowSleep666</a>, templete by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap-3.3.5/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

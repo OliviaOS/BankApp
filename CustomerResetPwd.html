@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="jquery-2.1.4.min.js"></script>
+    <link rel="icon" href="bootstrap-3.3.5/docs/favicon.ico">
+    <title>Reset Passwrod</title>
+    <link href="bootstrap-3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.5/docs/examples/cover/cover.css" rel="stylesheet">
+    <script src="bootstrap-3.3.5/docs/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="Customer.js"></script>
+
+    <script>
+    var repository=new Customer.CustomerRepository();
+      //onload function
+      $(function(){
+        if(sessionStorage["user"]!=null||sessionStorage["user"]!=undefined){
+          var user=JSON.parse(sessionStorage["user"]);
+          $("#greating").html(user.username);
+          $("#submit").click(function(){
+            resetPwd();
+          });
+
+        }else{
+          document.location="BankApp_Index.html";
+        }
+
+        $("#logout").click(function(){
+          sessionStorage.clear();
+          alert("Log out!");
+          document.location="BankApp_Index.html";
+        });//logout function
+      });
+
+      function resetPwd(){
+        if($("#newPassword").val()==$("#confirm").val()){
+          var customerId=$("#customerId").val();
+          var newPwd=$("#newPassword").val();
+          var username=$("#username").val();
+          var password=$("#password").val();
+          if(localStorage["users"]!=null||localStorage["users"]!=undefined){
+            var users=JSON.parse(localStorage["users"]);
+            for(var i=0;i<users.length;i++){
+              if(users[i].customerId==customerId){
+                if (users[i].username==username && users[i].password==password){
+                  var user={customerId:customerId,username:username,password:newPwd};
+                  repository.resetPassword(user);
+                }else{
+                  alert("Wrong Credential! Please try again!");
+                  document.location="CustomerResetPwd.html";
+                }
+              }else{
+                alert("Invalid CustomerID! Please try again!");
+                document.location="CustomerResetPwd.html";
+              }
+            }//for
+          }else{
+            alert("Invalid User! Please try again!");
+            document.location="CustomerResetPwd.html";
+          }
+        }else{
+          alert("New-Password and New-Password-Confirm must be same!");
+          location.reload();
+        }//else
+      }//submit
+    </script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">BankApp</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active" ><a href="CustomerHome.html">Home</a></li>
+                  <li class="active" id="logout"><a href='javascript:void(0)'>Logout</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">Ms/Mr. <span id="greating"></span>, Password Reset...</p>
+
+            <form >
+              <hr/>
+              <div class="form-group">
+                <label for="customerId" class="sr-only">CustomerID</label>
+                <input type="text" id="customerId" class="form-control" placeholder="CustomerID" required autofocus/>
+              </div>
+              <div class="form-group">
+                <label for="username" class="sr-only">Username</label>
+                <input type="text" id="username" class="form-control" placeholder="Username" required />
+              </div>
+              <div class="form-group">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Old Password" required/>
+              </div>
+              <div class="form-group">
+                <label for"newPassword" class="sr-only">New Password</label>
+                <input type="password" id="newPassword" class="form-control" placeholder="New Password" required/>
+              </div>
+              <div class="form-group">
+                <label for="confirm" class="sr-only">Confirm</label>
+                <input type="password" id="confirm" class="form-control" placeholder="New Password Confirm" required/>
+              </div>
+              </div>
+              <button class="btn btn-default" type="button" id="submit">Submit</button>
+              <button class="btn btn-default" type="clear" >&nbsp;Clear&nbsp;&nbsp;</button>
+            </form>
+            </form>
+          
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Develop by <a href="#">ShallowSleep666</a>, templete by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap-3.3.5/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

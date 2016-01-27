@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="jquery-2.1.4.min.js"></script>
+    <link rel="icon" href="bootstrap-3.3.5/docs/favicon.ico">
+    <title>Create User</title>
+    <link href="bootstrap-3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.5/docs/examples/cover/cover.css" rel="stylesheet">
+    <script src="bootstrap-3.3.5/docs/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="Admin.js"></script>
+
+    <script>
+      var repository= new Admin.CustomerRepository();
+
+      function newUser()
+      {
+        var customerId=$("#customerId").val();
+        var username=$("#username").val();
+        var password=$("#password").val();
+
+        if(localStorage["users"]==null||localStorage["users"]==undefined){
+          var user= new Admin.UserModel(customerId,username,password);
+
+          repository.createUser(user);
+          alert("Successfully create user!");
+          document.location="AdminHome.html";
+        }else{
+          var users=JSON.parse(localStorage["users"]);
+          for(var i=0;i<users.length;i++){
+            if(users[i].customerId==customerId){
+              alert("Not new User!")
+              document.location="AdminHome.html";
+            }else{
+              var user=new Admin.UserModel(customerId,username,password);
+              repository.createUser(user);
+              alert("Successfully create user!");
+              document.location="AdminHome.html";
+            }//has localstorage no repeat
+          }
+        }//no localstorage
+      }
+
+      //onload function
+      $(function(){
+        if(sessionStorage["user"]!=null||sessionStorage["user"]!=undefined){
+          var user=JSON.parse(sessionStorage["user"]);
+          if(user.username=="Admin"){
+            $("#save").click(function(){
+              newUser();
+            });
+
+          }else{
+            document.location="AdminLogin.html";
+          }
+        }else{
+          document.location="BankApp_Index.html";
+        }
+
+        $("#logout").click(function(){
+          sessionStorage.clear();
+          alert("Log out!")
+          document.location="BankApp_Index.html";
+        });//logout function
+      });
+
+      
+
+
+    </script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">BankApp</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active" ><a href="AdminHome.html">Home</a></li>
+                  <li class="active" id="logout"><a href='javascript:void(0)'>Logout</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">Create Customer-User...</p>
+
+            <form>
+              <div>
+                <label>CustomerID</label>
+                <input type="text" id="customerId" style="color:black;" required autofocus/>
+              </div>
+              <div>
+                <label>Username &nbsp;&nbsp;</label>
+                <input type="text" id="username" style="color:black;" required/>
+              </div>
+              <div>
+                <label>Password&nbsp;&nbsp;&nbsp;</label>
+                <input type="password" id="password" style="color:black;" required/>
+              </div>
+              <div>
+                <button type="reset" class="btn btn-default">Clear</button>
+                <button type="button" id="save" class="btn btn-default">Submit</button>
+              </div>
+
+            </form>
+          
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Develop by <a href="#">ShallowSleep666</a>, templete by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap-3.3.5/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

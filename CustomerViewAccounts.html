@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="jquery-2.1.4.min.js"></script>
+    <link rel="icon" href="bootstrap-3.3.5/docs/favicon.ico">
+    <title>Accounts Information</title>
+    <link href="bootstrap-3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.5/docs/examples/cover/cover.css" rel="stylesheet">
+    <script src="bootstrap-3.3.5/docs/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="Customer.js"></script>
+
+    <script>
+    var repository= new Customer.CustomerRepository();
+      //onload function
+      $(function(){
+        if(sessionStorage["user"]!=null||sessionStorage["user"]!=undefined){
+          var user=JSON.parse(sessionStorage["user"]);
+          $("#greating").html(user.username);
+
+          var customerId=user.customerId;
+          var savingAccount=repository.getSaving(customerId);
+          var checkingAccount=repository.getChecking(customerId);
+          $("#savingBalance").val("$ "+savingAccount.savingBalance);
+          $("#checkingBalance").val("$ "+checkingAccount.checkingBalance);
+          
+        }else{
+          document.location="BankApp_Index.html";
+        }
+
+        $("#logout").click(function(){
+          sessionStorage.clear();
+          alert("Log out!");
+          document.location="BankApp_Index.html";
+        });//logout function
+      });
+    </script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">BankApp</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active" ><a href="CustomerHome.html">Home</a></li>
+                  <li class="active" id="logout"><a href='javascript:void(0)'>Logout</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">Ms/Mr. <span id="greating"></span>, Accounts Balance...</p>
+
+            <form>
+              <hr/>
+              <div>
+                <label>&nbsp;&nbsp;Saving &nbsp;&nbsp;Account&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="savingBalance" style="color:dimgray;"readonly/>
+              </div> 
+              <div>
+                <label>Checking Account&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="checkingBalance" style="color:dimgray;" readonly/>
+              </div>
+            </form>
+          
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Develop by <a href="#">ShallowSleep666</a>, templete by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap-3.3.5/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>

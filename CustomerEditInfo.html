@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="jquery-2.1.4.min.js"></script>
+    <link rel="icon" href="bootstrap-3.3.5/docs/favicon.ico">
+    <title>Edit Personal Profile</title>
+    <link href="bootstrap-3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bootstrap-3.3.5/docs/examples/cover/cover.css" rel="stylesheet">
+    <script src="bootstrap-3.3.5/docs/assets/js/ie-emulation-modes-warning.js"></script>
+    <script src="Customer.js"></script>
+
+    <script>
+    var customerId="";
+    var repository=new Customer.CustomerRepository;
+      //onload function
+      $(function(){
+        if(sessionStorage["user"]!=null||sessionStorage["user"]!=undefined){
+          var user=JSON.parse(sessionStorage["user"]);
+          $("#greating").html(user.username);
+
+          customerId=user.customerId;
+          if(localStorage["customerInfo"]!=null||localStorage["customerInfo"]!=undefined){
+            var customerInfos=JSON.parse(localStorage["customerInfo"]);
+            for(var i=0;i<customerInfos.length;i++){
+              if(customerInfos[i].customerId==customerId){
+                var customer=customerInfos[i];
+                $("#firstname").val(customer.firstname);
+                $("#lastname").val(customer.lastname);
+                $("#email").val(customer.email);
+                $("#gender").val(customer.gender);
+                $("#mobile").val(customer.mobile);
+
+                $("#submit").click(function(){
+                     editInfo();
+                 });
+              }else{
+                alert("Want to have Profile? Please contact us!");
+                document.location="CustomerHome.html";
+              }
+            }//for
+          }else{
+            alert("Want to have Profile? Please contact us!");
+            document.location="CustomerHome.html";
+          }
+
+        }else{
+          document.location="BankApp_Index.html";
+        }
+
+        $("#logout").click(function(){
+          sessionStorage.clear();
+          alert("Log out!");
+          document.location="BankApp_Index.html";
+        });//logout function
+      });
+
+      function editInfo(){
+        var firstname=$("#firstname").val();
+        var lastname=$("#lastname").val();
+        var email=$("#email").val();
+        var gender=$("#gender").val();
+        var mobile=$("#mobile").val();
+        var customer={customerId:customerId,firstname:firstname,lastname:lastname,email:email,gender:gender,mobile:mobile};
+        repository.editInfo(customer);
+      }//function editinfo
+    </script>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <h3 class="masthead-brand">BankApp</h3>
+              <nav>
+                <ul class="nav masthead-nav">
+                  <li class="active" ><a href="CustomerHome.html">Home</a></li>
+                  <li class="active" id="logout"><a href='javascript:void(0)'>Logout</a></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <p class="lead">Ms/Mr. <span id="greating"></span><br/> Information Profile Management...</p>
+
+            <form>
+              <hr/>
+              <div>
+                <label>FirstName&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="firstname" style="color:dimgray;"/>
+              </div> 
+              <div>
+                <label>LastName&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="lastname" style="color:dimgray;"/>
+              </div>
+              <div>
+                <label>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="email" id="email" style="color:dimgray;" />
+              </div>
+              <div>
+                <label>Gender&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="gender" style="color:dimgray;"/>
+              </div>
+              <div>
+                <label>Mobile&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <input type="text" id="mobile" style="color:dimgray;"/>
+              </div>
+              <div style="margin-top:20px;">
+                 <button class="btn btn-default" type="clear" >&nbsp;Clear&nbsp;&nbsp;</button>
+                 <button class="btn btn-default" type="button" id="submit">Submit</button>
+              </div>
+            </form>
+          
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Develop by <a href="#">ShallowSleep666</a>, templete by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="bootstrap-3.3.5/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="bootstrap-3.3.5/docs/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
